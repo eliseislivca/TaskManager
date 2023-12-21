@@ -1,0 +1,76 @@
+body {
+    font-size: 23px;
+}
+
+.wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.inner {
+    display: flex;
+    padding: 10px;
+}
+
+.inner-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+}
+
+.name-input,
+.desc-input {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    color: white;
+}
+
+input {
+    border-radius: 10px;
+}
+
+.add-btn {
+    width: 100px;
+    height: 35px;
+    margin-right: 15px;
+
+    color: white;
+    background-color: rgb(245, 100, 33);
+
+}
+
+.new-tasks {
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgb(3, 75, 90);
+
+}
+
+.new-tasks p {
+    width: 100%;
+    padding-left: 20px;
+    height: 45px;
+    color: rgb(220, 104, 76);
+}
+
+.wrapper-of-task {
+    display: flex;
+    border-bottom: 2px solid rgb(78, 127, 144);
+}
+
+.wrapper-of-task button {
+    width: 100px;
+    height: 30px;
+    margin: 0 3px;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
