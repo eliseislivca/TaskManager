@@ -11,9 +11,15 @@ const PageOfTasks = () => {
 
     const createNewTask = () => {
         if (inputValue.trim() !== '') {
-            setTasks([...tasks, inputValue]);
+            setTasks([{ text: inputValue, completed: false }, ...tasks]);
             setInputValue('');
         };
+    };
+
+    const completeTask = (index) => {
+        const updatedTasks = [...tasks];
+        updatedTasks[index] = { ...updatedTasks[index], completed: true };
+        setTasks(updatedTasks);
     };
 
     return (
@@ -38,10 +44,10 @@ const PageOfTasks = () => {
                 {tasks.map((task, index) => (
                     <div key={index} className='wrapper-of-task'>
 
-                        <p >{task}</p>
+                        <p className={`${task.completed ? 'completed' : 'task-text'}`}>{task.text}</p>
 
                         <div className="btn">
-                            <button>Complete</button>
+                            <button onClick={() => completeTask(index)} className={`${task.completed ? 'complete-hide' : 'btn-complete'}`}>Complete</button>
                             <button>Delete</button>
                             <button>Edit</button>
                         </div>
