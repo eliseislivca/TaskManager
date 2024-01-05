@@ -30,28 +30,25 @@ label {
 }
 
 input {
-    border-radius: 10px;
+    border-radius: 15px;
+    padding: 7px;
 }
 
 .add-btn {
     width: 100px;
     height: 35px;
     margin-right: 15px;
-
     color: white;
     background-color: rgb(245, 100, 33);
-
 }
 
 .new-tasks {
     display: flex;
     flex-direction: column;
-
     background-color: rgb(3, 75, 90);
-
 }
 
-.new-tasks p {
+.new-tasks .task-text {
     width: 100%;
     padding-left: 20px;
     height: 45px;
@@ -73,4 +70,20 @@ input {
     display: flex;
     align-items: center;
     margin-right: 15px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #808080;
+    width: 100%;
+    padding-left: 20px;
+    height: 45px;
+}
+
+.complete-hide {
+    display: none;
+}
+
+.btn-complete {
+    color: rgb(0, 170, 0);
 }
