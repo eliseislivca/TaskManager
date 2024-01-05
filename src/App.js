@@ -1,4 +1,4 @@
-import PageOfTasks from "./components/pageOfTasks/PageOfTasks";
+import PageOfTasks from "./Components/pageOfTasks/PageOfTasks";
 
 function App() {
 
