@@ -1,49 +1,66 @@
+import React, { useState } from 'react';
 import './pageOfTasks.css';
-import { useState } from 'react';
 
 const PageOfTasks = () => {
     const [inputValue, setInputValue] = useState('');
+    const [secondInputValue, secondSetInputValue] = useState('');
     const [tasks, setTasks] = useState([]);
+    const [selectedTaskIndex, setSelectedTaskIndex] = useState(-1);
+    const [text, setText] = useState('');
     const [isDeleteSuccess, setIsDeleteSuccess] = useState(false);
     const [isActive, setIsActive] = useState(false);
     const [isActiveSuccess, setIsActiveSuccess] = useState(false);
     const [deletingIndex, setDeletingIndex] = useState(null);
 
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
+    const createNewTask = () => {
+        if ((inputValue.trim() !== '') && (inputValue.length >= 3)) {
+            setTasks([...tasks, inputValue]);
+            setInputValue('');
+            setText('');
+        } else {
+            setText('Текст должен быть больше 3 символов');
+        }
     };
 
-    const createNewTask = () => {
-        if (inputValue.trim() !== '') {
-            setTasks([inputValue, ...tasks]);
-            setInputValue('');
-        };
+    const updateTask = (index) => {
+        if ((secondInputValue.trim() !== '') && (secondInputValue.length >= 3)) {
+            const updatedTasks = [...tasks];
+            updatedTasks[index] = secondInputValue;
+            setTasks(updatedTasks);
+            secondSetInputValue('');
+            setSelectedTaskIndex(-1);
+        }
+    };
+
+    const handleEditClick = (index) => {
+        setSelectedTaskIndex(index);
+        secondSetInputValue(tasks[index]);
     };
 
     const deleteTask = (index) => {
         setIsActive(true);
         setDeletingIndex(index);
     }
-        const deleteTaskSuccess = () => {
-            const updatedTasks = [...tasks];
-            updatedTasks.splice(deletingIndex, 1);
-            setTasks(updatedTasks);
-            setIsDeleteSuccess(true);
-            setIsActive(false);
-            setIsActiveSuccess(true);
+    const deleteTaskSuccess = () => {
+        const updatedTasks = [...tasks];
+        updatedTasks.splice(deletingIndex, 1);
+        setTasks(updatedTasks);
+        setIsDeleteSuccess(true);
+        setIsActive(false);
+        setIsActiveSuccess(true);
 
-            setTimeout(() => {
-                setIsActiveSuccess(false);
-            }, 2000);
-        }
-        const deleteTaskCancel = () => {
-            setIsActive(false);
-        };
+        setTimeout(() => {
+            setIsActiveSuccess(false);
+        }, 2000);
+    }
+    const deleteTaskCancel = () => {
+        setIsActive(false);
+    };
 
-        const handleKeyPress = (event) => {
-            if(event.key == "Enter")
+    const handleKeyPress = (event) => {
+        if (event.key == "Enter")
             createNewTask();
-        }
+    }
 
     return (
         <div className="wrapper">
@@ -65,14 +82,19 @@ const PageOfTasks = () => {
                 <div className="inner">
                     <div className="name-input">
                         <label>Task</label>
-                        <input type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        onKeyPress={handleKeyPress}></input>
-                    </div>
-                    <div className="desc-input">
-                        <label>Description of Task</label>
-                        <input type="text"></input>
+                        <input
+                            className='task-name'
+                            type="text"
+                            value={inputValue}
+                            onChange={(e) => {
+                                setInputValue(e.target.value)
+                            }}
+                            onKeyPress={handleKeyPress}
+                        />
+                        {
+                            text && (
+                                <label className='input-error'>{text}</label>)
+                        }
                     </div>
                 </div>
                 <button className="add-btn" onClick={createNewTask}>Add Task</button>
@@ -80,17 +102,42 @@ const PageOfTasks = () => {
             <div className='new-tasks'>
                 {tasks.map((task, index) => (
                     <div key={index} className='wrapper-of-task'>
-                        <p>{task}</p>
+
+                        {
+                            selectedTaskIndex === index ? (
+                                <input
+                                    type="text"
+                                    value={secondInputValue}
+                                    onChange={(e) => secondSetInputValue(e.target.value)}
+                                />
+                            ) : (
+                                <p>{task}</p>
+                            )
+                        }
+
                         <div className="btn">
-                            <button>Complete</button>
-                            <button className='btn-delete' onClick={() => deleteTask(index)}>Delete</button>
-                            <button>Edit</button>
-                        </div>
-                    </div>
+                            {selectedTaskIndex === index ? (
+                                <>
+                                    <button onClick={() => updateTask(index)}>Update</button>
+                                    <button onClick={() => setSelectedTaskIndex(-1)}>Cancel</button>
+                                </>
+                            ) : (
+                                <button onClick={() => handleEditClick(index)}>Edit</button>
+                            )}
+
+                            {selectedTaskIndex === -1 && (
+                                <>
+                                    <button>Complete</button>
+                                    <button className='btn-delete' onClick={() => deleteTask(index)}>Delete</button>
+                                </>
+                            )}
+                        </div >
+                    </div >
                 ))}
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
 export default PageOfTasks;
+
