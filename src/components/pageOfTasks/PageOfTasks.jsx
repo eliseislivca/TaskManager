@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import './pageOfTasks.css';
+import '../../styles/pageOfTasks.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
+import AddingTask from './AddingTask';
+import ShowTask from './ShowTask';
 
 const PageOfTasks = () => {
     const [inputValue, setInputValue] = useState('');
@@ -83,61 +85,22 @@ const PageOfTasks = () => {
             {isActiveSuccess && (<div className="operation-success">
                 <p>Операция удаления прошла успешно <FontAwesomeIcon icon={faSquareCheck} beat style={{color: "#199400"}}/></p>
             </div>)}
-            <div className='inner-wrapper'>
-                <div className="inner">
-                    <div className="name-input">
-                        <label>Task</label>
-                        <input
-                            className='task-name'
-                            type="text"
-                            value={inputValue}
-                            onChange={(e) => {
-                                setInputValue(e.target.value)
-                            }}
-                            onKeyPress={handleKeyPress}
-                        />
-                        {
-                            text && (
-                                <label className='input-error'>{text}</label>)
-                        }
-                    </div>
-                </div>
-                <button className="add-btn" onClick={createNewTask}>Add Task</button>
-            </div>
-            <div className='new-tasks'>
-                {tasks.map((task, index) => (
-                    <div key={index} className='wrapper-of-task'>
-                        <p className={`${task.completed ? 'completed' : 'task-text'}`}>{task.text}</p>
-                        <div className="btn">
-                            <button onClick={() => completeTask(index)} className={`${task.completed ? 'complete-hide' : 'btn-complete'}`}>Complete</button>
-                        {
-                            selectedTaskIndex === index ? (
-                                <input
-                                    type="text"
-                                    value={secondInputValue}
-                                    onChange={(e) => secondSetInputValue(e.target.value)}
-                                />
-                            ) : (
-                                <p>{task.completed}</p>
-                            )
-                        }
-                            {selectedTaskIndex === index ? (
-                                <>
-                                    <button onClick={() => updateTask(index)}>Update</button>
-                                    <button onClick={() => setSelectedTaskIndex(-1)}>Cancel</button>
-                                </>
-                            ) : (
-                                <button onClick={() => handleEditClick(index)}>Edit</button>
-                            )}
-                            {selectedTaskIndex === -1 && (
-                                <>
-                                    <button className='btn-delete' onClick={() => deleteTask(index)}>Delete</button>
-                                </>
-                            )}
-                        </div >
-                    </div >
-                ))}
-            </div >
+            <AddingTask 
+            text={text}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            handleKeyPress={handleKeyPress}
+            createNewTask={createNewTask} />
+            <ShowTask 
+            tasks={tasks}
+            completeTask={completeTask}
+            secondInputValue={secondInputValue}
+            secondSetInputValue={secondSetInputValue}
+            selectedTaskIndex={selectedTaskIndex}
+            updateTask={updateTask}
+            setSelectedTaskIndex={setSelectedTaskIndex}
+            handleEditClick={handleEditClick}
+            deleteTask={deleteTask} />
         </div >
     )
 }
