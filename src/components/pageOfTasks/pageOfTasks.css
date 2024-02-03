@@ -1,39 +1,51 @@
+* {
+    box-sizing: border-box;
+}
 body {
     font-size: 23px;
 }
-
 .wrapper {
     max-width: 900px;
     margin: 0 auto;
 }
-
+.wrapper-overlay {
+    position: fixed;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff78;
+}
 .inner {
     display: flex;
     padding: 10px;
 }
-
 .inner-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: black;
+    margin-bottom: 12px;
 }
-
 .name-input,
 .desc-input {
     display: flex;
     flex-direction: column;
 }
-
+.task-name {
+    width: 170px;
+}
+.input-error {
+    font-size: 12px;
+    color: #ff3f3f;
+}
 label {
     color: white;
 }
-
 input {
-    border-radius: 15px;
-    padding: 7px;
+    border-radius: 5px;
+    outline: none;
 }
-
 .add-btn {
     width: 100px;
     height: 35px;
@@ -41,7 +53,6 @@ input {
     color: white;
     background-color: rgb(245, 100, 33);
 }
-
 .new-tasks {
     display: flex;
     flex-direction: column;
@@ -51,27 +62,35 @@ input {
 .new-tasks .task-text {
     width: 100%;
     padding-left: 20px;
-    height: 45px;
     color: rgb(220, 104, 76);
+    background: transparent;
+    word-break: break-all;
 }
-
+.new-tasks input,
+.new-tasks input:focus-visible {
+    margin: auto 10px;
+    width: 250px;
+    height: 40px;
+    color: rgb(220, 104, 76);
+    font-size: 18px;
+}
 .wrapper-of-task {
     display: flex;
     border-bottom: 2px solid rgb(78, 127, 144);
+    min-height: 90px;
 }
-
 .wrapper-of-task button {
     width: 100px;
     height: 30px;
     margin: 0 3px;
 }
-
 .btn {
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     margin-right: 15px;
 }
-
 .completed {
     text-decoration: line-through;
     color: #808080;
@@ -79,11 +98,94 @@ input {
     padding-left: 20px;
     height: 45px;
 }
-
 .complete-hide {
     display: none;
 }
 
 .btn-complete {
     color: rgb(0, 170, 0);
+}
+.btn-delete {
+    color: #fff;
+    background-color: rgb(222, 65, 65);
+}
+.delete-active {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 470px;
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.delete-inactive {
+    display: none;
+}
+.delete-active h2 {
+    font-size: 27px;
+    font-weight: 400;
+    margin: 0;
+    padding: 40px 40px 0 40px;
+}
+.delete-active p {
+    font-size: 20px;
+    font-weight: 350;
+    margin: 0;
+    padding: 20px 40px 0;
+}
+.btn-again-delete {
+    display: flex;
+    justify-content: flex-end;
+    padding: 30px 30px 0 0;
+}
+.btn-again-delete .btn-cancel {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin: 0 5px;
+    border-radius: 5px;
+    background-color: #fff;
+    color: rgb(83, 83, 83);
+    align-items: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(195, 195, 195);
+    align-self: flex-end;
+}
+.btn-cancel:hover {
+    transition-duration: 0.2s;
+    background-color: #d4d4d4;
+}
+.btn-again-delete .btn-remove {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin: 0 5px;
+    border-radius: 5px;
+    color: rgb(222, 65, 65);
+    align-items: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(222, 65, 65);
+    background-color: #fff;
+}
+.btn-remove:hover {
+    transition-duration: 0.2s;
+    background-color: rgb(241, 72, 72);
+    color: #fff;
+}
+.operation-success {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    color: #000;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    display: block;
+    border: #000 1px solid;
 }
