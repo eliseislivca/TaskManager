@@ -11,30 +11,33 @@ const PageOfTasks = () => {
     const [isActive, setIsActive] = useState(false);
     const [isActiveSuccess, setIsActiveSuccess] = useState(false);
     const [deletingIndex, setDeletingIndex] = useState(null);
-
+    
     const createNewTask = () => {
         if ((inputValue.trim() !== '') && (inputValue.length >= 3)) {
-            setTasks([...tasks, inputValue]);
+            setTasks([{ text: inputValue, completed: false }, ...tasks]);
             setInputValue('');
             setText('');
         } else {
             setText('Текст должен быть больше 3 символов');
         }
     };
-
+    const completeTask = (index) => {
+        const updatedTasks = [...tasks];
+        updatedTasks[index] = { ...updatedTasks[index], completed: true };
+        setTasks(updatedTasks);
+    };
     const updateTask = (index) => {
         if ((secondInputValue.trim() !== '') && (secondInputValue.length >= 3)) {
             const updatedTasks = [...tasks];
-            updatedTasks[index] = secondInputValue;
+            updatedTasks[index] = { ...updatedTasks[index], text: secondInputValue };
             setTasks(updatedTasks);
             secondSetInputValue('');
             setSelectedTaskIndex(-1);
         }
     };
-
     const handleEditClick = (index) => {
         setSelectedTaskIndex(index);
-        secondSetInputValue(tasks[index]);
+        secondSetInputValue(tasks[index].text);
     };
 
     const deleteTask = (index) => {
@@ -102,7 +105,9 @@ const PageOfTasks = () => {
             <div className='new-tasks'>
                 {tasks.map((task, index) => (
                     <div key={index} className='wrapper-of-task'>
-
+                        <p className={`${task.completed ? 'completed' : 'task-text'}`}>{task.text}</p>
+                        <div className="btn">
+                            <button onClick={() => completeTask(index)} className={`${task.completed ? 'complete-hide' : 'btn-complete'}`}>Complete</button>
                         {
                             selectedTaskIndex === index ? (
                                 <input
@@ -111,11 +116,9 @@ const PageOfTasks = () => {
                                     onChange={(e) => secondSetInputValue(e.target.value)}
                                 />
                             ) : (
-                                <p>{task}</p>
+                                <p>{task.completed}</p>
                             )
                         }
-
-                        <div className="btn">
                             {selectedTaskIndex === index ? (
                                 <>
                                     <button onClick={() => updateTask(index)}>Update</button>
@@ -124,10 +127,8 @@ const PageOfTasks = () => {
                             ) : (
                                 <button onClick={() => handleEditClick(index)}>Edit</button>
                             )}
-
                             {selectedTaskIndex === -1 && (
                                 <>
-                                    <button>Complete</button>
                                     <button className='btn-delete' onClick={() => deleteTask(index)}>Delete</button>
                                 </>
                             )}
@@ -140,4 +141,3 @@ const PageOfTasks = () => {
 }
 
 export default PageOfTasks;
-
