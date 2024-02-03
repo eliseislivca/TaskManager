@@ -11,7 +11,6 @@ const PageOfTasks = () => {
     const [tasks, setTasks] = useState([]);
     const [selectedTaskIndex, setSelectedTaskIndex] = useState(-1);
     const [text, setText] = useState('');
-    const [isDeleteSuccess, setIsDeleteSuccess] = useState(false);
     const [isActive, setIsActive] = useState(false);
     const [isActiveSuccess, setIsActiveSuccess] = useState(false);
     const [deletingIndex, setDeletingIndex] = useState(null);
@@ -52,7 +51,6 @@ const PageOfTasks = () => {
         const updatedTasks = [...tasks];
         updatedTasks.splice(deletingIndex, 1);
         setTasks(updatedTasks);
-        setIsDeleteSuccess(true);
         setIsActive(false);
         setIsActiveSuccess(true);
 
