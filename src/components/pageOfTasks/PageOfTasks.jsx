@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './pageOfTasks.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 
 const PageOfTasks = () => {
     const [inputValue, setInputValue] = useState('');
@@ -79,7 +81,7 @@ const PageOfTasks = () => {
                 </div>
             </div>
             {isActiveSuccess && (<div className="operation-success">
-                <p>Операция удаления прошла успешно ✅</p>
+                <p>Операция удаления прошла успешно <FontAwesomeIcon icon={faSquareCheck} beat style={{color: "#199400"}}/></p>
             </div>)}
             <div className='inner-wrapper'>
                 <div className="inner">

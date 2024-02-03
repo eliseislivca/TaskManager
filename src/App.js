@@ -2,11 +2,9 @@ import PageOfTasks from "./Components/pageOfTasks/PageOfTasks";
 
 function App() {
 
-    return (
-        <>
-            <PageOfTasks />
-        </>
-    );
+  return (
+    <PageOfTasks />
+  );
 }
 
 export default App;
