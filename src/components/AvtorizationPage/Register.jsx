@@ -1,56 +1,70 @@
-import React from "react";
-import { useState, useNavigate } from "react";
+import React, { useContext, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
+import { faPencil, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import '../../styles/Avtorization.css';
+import axios from "axios";
+import { CustomContext } from './Context';
+import { useNavigate } from "react-router";
+import {Link} from 'react-router-dom';  
 
 const Register = () => {
+    const [status, setStatus] = useState(false);
+    const [email, setEmail] = useState('');
+    const [eye, setEye] = useState(false);
+    const { user, setUser } = useContext(CustomContext);
+    const usenavigate = useNavigate();
+    // const [password, setPassword] = useState('');
 
-    const [id, idChenge] = useState('');
-    const [name, nameChenge] = useState('');
-    const [password, passwordChenge] = useState('');
-    const [email, emailChenge] = useState('');
-    const [phone, phoneChenge] = useState('');
-    // const navigate=useNavigate();
-
-    const handlesubmit = (e) => {
-        e.preventDefault();
-        let regobj = { id, name, password, email, phone };
-        // console.log(regobj);
-        fetch("http://localhost:3002/user", {
-            method: "POST",
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(regobj)
-        });
+    const registerUser = (e) => {
+        e.preventDefault()
+        let newUser = {
+            email,
+            password: e.target[0].value
+        }
+        axios.post('http://localhost:8080/users', newUser)
+            .then(({ data }) => {
+                setUser(newUser)
+                usenavigate('/')
+                localStorage.setItem('user', JSON.stringify(newUser));
+            })
+            .catch((err) => console.log(err.message))
     }
-        return (
-            <form className="wrapper-register" onSubmit={handlesubmit}>
-                <h1>User Registration</h1>
-                <div className="mb-3">
-                    <label>User Name</label>
-                    <input value={id} onChange={e => idChenge(e.target.value)} className="form-control" placeholder="user" />
-                </div>
-
-                <div className="mb-3">
-                    <label>Password</label>
-                    <input value={password} onChange={e => passwordChenge(e.target.value)} type="password" className="form-control" placeholder="Password" />
-                </div>
-
-                <div className="mb-3">
-                    <label>Full Name</label>
-                    <input value={name} onChange={e => nameChenge(e.target.value)} className="form-control" />
-                </div>
-
-                <div className="mb-3">
-                    <label>Email</label>
-                    <input value={email} onChange={e => emailChenge(e.target.value)} type="email" className="form-control" placeholder="Enter email" />
-                </div>
-
-                <div className="mb-3">
-                    <label>Phone</label>
-                    <input value={phone} onChange={e => phoneChenge(e.target.value)} className="form-control" placeholder="Enter phone number" />
-                </div>
-
-                <button type="submit" className="">Register</button>
+    return (
+        <div className="content">
+            <form className="form" onSubmit={registerUser}>
+                {
+                    status && <p onClick={() => { setStatus(false) }} className="form-email">{email}<FontAwesomeIcon icon={faPencil} /></p>
+                }
+                <h2 className="form-title" >
+                    {
+                        status ? 'Придумай пароль для входа' : 'Регистрация'
+                    }
+                </h2>
+                {
+                    !status &&
+                    <>
+                        <input value={email} onChange={(e) => setEmail(e.target.value)} className="form-field" type="email" placeholder='Введите Email' />
+                        <button className="form-btn" type="button" onClick={() => setStatus(true)}>Продолжить</button>
+                    </>
+                }
+                {
+                    status &&
+                    <>
+                        <div className="form-password">
+                            <input className="form-field" type={eye ? 'text' : 'password'} placeholder='Придумайте пароль' />
+                            <span className="form-eye" onClick={() => setEye(prev => !prev)}>
+                                {
+                                    !eye ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />
+                                }
+                            </span>
+                        </div>
+                        <button className="form-btn" type="submit">Создать аккаунт</button>
+                    </>
+                }
+                <Link to='/login'>Войти</Link>
             </form>
-        );
-    };
+        </div>
+    );
+};
 
-    export default Register;
+export default Register;
