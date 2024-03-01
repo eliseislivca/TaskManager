@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import '../../styles/pageOfTasks.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import AddingTask from './AddingTask';
 import ShowTask from './ShowTask';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import { CustomContext } from '../AvtorizationPage/Context';
+import axios from 'axios';
 
 const PageOfTasks = () => {
     const [inputValue, setInputValue] = useState('');
@@ -14,12 +18,59 @@ const PageOfTasks = () => {
     const [isActive, setIsActive] = useState(false);
     const [isActiveSuccess, setIsActiveSuccess] = useState(false);
     const [deletingIndex, setDeletingIndex] = useState(null);
-    
+    const { user, setUser } = useContext(CustomContext);
+    const { task, setTask } = useContext(CustomContext);
+    const usenavigate = useNavigate();
+    const logOutUser = () => {
+        setUser({
+            email: ''
+        });
+        localStorage.removeItem('user');
+        setTask({
+            task: ''
+        })
+        localStorage.removeItem('task');
+        usenavigate('/login');
+    };
+
+    useEffect(() => {
+        const storedTasks = localStorage.getItem('task');
+        if (storedTasks) {
+            const parsedTasks = JSON.parse(storedTasks);
+            const userTasks = parsedTasks.filter(task => task.userId === user.id);
+            setTasks(userTasks);
+        }
+    }, [user.id]);
+
+    // GET-query to get the current user's tasks from the database
+    useEffect(() => {
+        axios.get(`http://localhost:8080/tasks?userId=${user.id}`)
+            .then(response => {
+                setTasks(response.data);
+                localStorage.setItem('task', JSON.stringify(response.data));
+            })
+            .catch(error => {
+                console.error('Ошибка при получении задач:', error);
+            });
+    }, [user.id]);
+
     const createNewTask = () => {
         if ((inputValue.trim() !== '') && (inputValue.length >= 3)) {
-            setTasks([{ text: inputValue, completed: false }, ...tasks]);
-            setInputValue('');
-            setText('');
+            let newTask = {
+                task: inputValue,
+                completed: false,
+                userId: user.id
+            }
+            axios.post('http://localhost:8080/tasks', newTask)
+                .then(res => {
+                    console.log('задача успешно добавлена: ', res.data);
+                    const updatedAddedTask = [res.data, ...tasks];
+                    setTasks(updatedAddedTask);
+                    setInputValue('');
+                    setText('');
+                    localStorage.setItem('task', JSON.stringify(updatedAddedTask));
+                })
+                .catch((err) => console.log(err.message))
         } else {
             setText('Текст должен быть больше 3 символов');
         }
@@ -66,7 +117,6 @@ const PageOfTasks = () => {
         if (event.key == "Enter")
             createNewTask();
     }
-
     return (
         <div className="wrapper">
             {isActive && (
@@ -81,24 +131,25 @@ const PageOfTasks = () => {
                 </div>
             </div>
             {isActiveSuccess && (<div className="operation-success">
-                <p>Операция удаления прошла успешно <FontAwesomeIcon icon={faSquareCheck} beat style={{color: "#199400"}}/></p>
+                <p>Операция удаления прошла успешно <FontAwesomeIcon icon={faSquareCheck} beat style={{ color: "#199400" }} /></p>
             </div>)}
-            <AddingTask 
-            text={text}
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            handleKeyPress={handleKeyPress}
-            createNewTask={createNewTask} />
-            <ShowTask 
-            tasks={tasks}
-            completeTask={completeTask}
-            secondInputValue={secondInputValue}
-            secondSetInputValue={secondSetInputValue}
-            selectedTaskIndex={selectedTaskIndex}
-            updateTask={updateTask}
-            setSelectedTaskIndex={setSelectedTaskIndex}
-            handleEditClick={handleEditClick}
-            deleteTask={deleteTask} />
+            <Link to={'/login'} onClick={logOutUser}>Logout</Link>
+            <AddingTask
+                text={text}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                handleKeyPress={handleKeyPress}
+                createNewTask={createNewTask} />
+            <ShowTask
+                tasks={tasks}
+                completeTask={completeTask}
+                secondInputValue={secondInputValue}
+                secondSetInputValue={secondSetInputValue}
+                selectedTaskIndex={selectedTaskIndex}
+                updateTask={updateTask}
+                setSelectedTaskIndex={setSelectedTaskIndex}
+                handleEditClick={handleEditClick}
+                deleteTask={deleteTask} />
         </div >
     )
 }
