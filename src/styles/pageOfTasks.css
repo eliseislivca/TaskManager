@@ -189,3 +189,16 @@ input {
     display: block;
     border: #000 1px solid;
 }
+.log-out {
+    font-size: 20px;
+    display: flex;
+    justify-content: right;
+    margin: 5px 30px;
+    text-decoration: none;
+    color: rgb(63, 63, 63);
+    font-weight: 400;
+}
+.log-out:hover {
+    color: rgb(63, 63, 63);
+    font-weight: 600;
+}
