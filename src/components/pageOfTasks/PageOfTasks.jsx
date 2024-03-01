@@ -32,7 +32,6 @@ const PageOfTasks = () => {
         localStorage.removeItem('task');
         usenavigate('/login');
     };
-
     useEffect(() => {
         const storedTasks = localStorage.getItem('task');
         if (storedTasks) {
@@ -41,7 +40,6 @@ const PageOfTasks = () => {
             setTasks(userTasks);
         }
     }, [user.id]);
-
     // GET-query to get the current user's tasks from the database
     useEffect(() => {
         axios.get(`http://localhost:8080/tasks?userId=${user.id}`)
@@ -76,24 +74,49 @@ const PageOfTasks = () => {
         }
     };
     const completeTask = (index) => {
-        const updatedTasks = [...tasks];
-        updatedTasks[index] = { ...updatedTasks[index], completed: true };
-        setTasks(updatedTasks);
+        const taskIdToComplete = tasks[index].id;
+        const copleteUpdateTask = {
+            completed: true
+        };
+        axios.patch(`http://localhost:8080/tasks/${taskIdToComplete}`, copleteUpdateTask)
+        .then(()=> {
+            const updatedTasks = [...tasks];
+            updatedTasks[index] = { ...updatedTasks[index], completed: true };
+            setTasks(updatedTasks);
+            localStorage.setItem('task', JSON.stringify(updatedTasks))
+        })
+        .catch(error => {
+            console.error('Error completed task:', error);
+        });
     };
     const updateTask = (index) => {
         if ((secondInputValue.trim() !== '') && (secondInputValue.length >= 3)) {
-            const updatedTasks = [...tasks];
-            updatedTasks[index] = { ...updatedTasks[index], text: secondInputValue };
-            setTasks(updatedTasks);
-            secondSetInputValue('');
-            setSelectedTaskIndex(-1);
+            const taskIdToUpdate = tasks[index].id;
+            const updatedTask = {
+                task: secondInputValue
+            };
+            axios.patch(`http://localhost:8080/tasks/${taskIdToUpdate}`, updatedTask)
+            .then(() => {
+                const updatedTasks = tasks.map((task, i) => {
+                    if (i === index) {
+                        return { ...task, task: secondInputValue };
+                    }
+                    return task;
+                });
+                setTasks(updatedTasks);
+                secondSetInputValue('');
+                setSelectedTaskIndex(-1);
+                localStorage.setItem('task', JSON.stringify(updatedTasks));
+            })
+            .catch(error => {
+                console.error('Error updating task:', error);
+            });
         }
     };
     const handleEditClick = (index) => {
         setSelectedTaskIndex(index);
-        secondSetInputValue(tasks[index].text);
+        secondSetInputValue(tasks[index].task);
     };
-
     const deleteTask = (index) => {
         setIsActive(true);
         setDeletingIndex(index);
@@ -119,7 +142,6 @@ const PageOfTasks = () => {
     const deleteTaskCancel = () => {
         setIsActive(false);
     };
-
     const handleKeyPress = (event) => {
         if (event.key == "Enter")
             createNewTask();
@@ -140,7 +162,7 @@ const PageOfTasks = () => {
             {isActiveSuccess && (<div className="operation-success">
                 <p>Операция удаления прошла успешно <FontAwesomeIcon icon={faSquareCheck} beat style={{ color: "#199400" }} /></p>
             </div>)}
-            <Link to={'/login'} onClick={logOutUser}>Logout</Link>
+            <Link to={'/login'} className='log-out' onClick={logOutUser}>Logout</Link>
             <AddingTask
                 text={text}
                 inputValue={inputValue}
