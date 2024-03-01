@@ -7,7 +7,7 @@ const ShowTask = ({tasks, completeTask, secondInputValue, secondSetInputValue, s
       <div className='new-tasks'>
       {tasks.map((task, index) => (
           <div key={index} className='wrapper-of-task'>
-              <p className={`${task.completed ? 'completed' : 'task-text'}`}>{task.text}</p>
+              <p className={`${task.completed ? 'completed' : 'task-text'}`}>{task.task}</p>
               <div className="btn">
                   <button onClick={() => completeTask(index)} className={`${task.completed ? 'complete-hide' : 'btn-complete'}`}>Complete</button>
               {
