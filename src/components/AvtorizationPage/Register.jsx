@@ -61,7 +61,7 @@ const Register = () => {
                         <button className="form-btn" type="submit">Создать аккаунт</button>
                     </>
                 }
-                <Link to='/login'>Войти</Link>
+                <Link className="form-link" to='/login'>Войти</Link>
             </form>
         </div>
     );
