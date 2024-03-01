@@ -99,16 +99,23 @@ const PageOfTasks = () => {
         setDeletingIndex(index);
     }
     const deleteTaskSuccess = () => {
-        const updatedTasks = [...tasks];
-        updatedTasks.splice(deletingIndex, 1);
-        setTasks(updatedTasks);
-        setIsActive(false);
-        setIsActiveSuccess(true);
-
-        setTimeout(() => {
-            setIsActiveSuccess(false);
-        }, 2000);
-    }
+        const taskIdDelete = tasks[deletingIndex].id;
+        axios.delete(`http://localhost:8080/tasks/${taskIdDelete}`)
+            .then(() => {
+                const updatedTasks = tasks.filter((task, index) => index !== deletingIndex);
+                setTasks(updatedTasks);
+                localStorage.setItem('task', JSON.stringify(updatedTasks));
+                setIsActive(false);
+                setIsActiveSuccess(true);
+    
+                setTimeout(() => {
+                    setIsActiveSuccess(false);
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error deleting task:', error)
+            });
+    };    
     const deleteTaskCancel = () => {
         setIsActive(false);
     };
