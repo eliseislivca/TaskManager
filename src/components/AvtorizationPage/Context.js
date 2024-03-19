@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 export const CustomContext = createContext();
 
@@ -8,22 +8,29 @@ export const Context = (props) => {
   });
   const [task, setTask] = useState({
     task: ''
-  })
+  });
+
   useEffect(() => {
-    if (localStorage.getItem('user') !== null) {
-      setUser(JSON.parse(localStorage.getItem('user')))
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
-    if (localStorage.getItem('task') !== null) {
-      setTask(JSON.parse(localStorage.getItem('task')));
+
+    const storedTask = localStorage.getItem('task');
+    if (storedTask) {
+      setTask(JSON.parse(storedTask));
     }
   }, []);
+
   const value = {
     user,
     setUser,
     task,
     setTask
   }
-  return <CustomContext.Provider value={value}>
-    {props.children}
-  </CustomContext.Provider>
-}
+  return (
+    <CustomContext.Provider value={value}>
+      {props.children}
+    </CustomContext.Provider>
+  );
+};

@@ -4,18 +4,16 @@ import Login from "./Components/AvtorizationPage/Login";
 import Register from "./Components/AvtorizationPage/Register";
 
 function App() {
-
-    return (<div className='App'>
-        <BrowserRouter>
-            <Routes>
-                <Route path='/login' element={<Login />}></Route>
-                <Route path='/tasks' element={<PageOfTasks />}></Route>
-                <Route path='/register' element={<Register />}></Route>
-                <Route path='/*' element={<Navigate to="/login" />} />
-            </Routes>
-        </BrowserRouter>
-    </div>
-    );
+  return (<div className='App'>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/tasks' element={<PageOfTasks />}></Route>
+        <Route path='/register' element={<Register />}></Route>
+        <Route path='/*' element={<Navigate to="/login" />} />
+      </Routes>
+    </BrowserRouter>
+  </div>
+  );
 }
-
 export default App;

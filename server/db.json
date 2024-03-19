@@ -1,4 +1,10 @@
 {
-    "users": [],
-    "tasks": []
+  "users": [
+    {
+      "id": "d2dd7279-fcbd-4989-b719-765ba8dc17ba",
+      "email": "elisey@mail.ru",
+      "password": "elisey1234"
+    }
+  ],
+  "tasks": []
 }
