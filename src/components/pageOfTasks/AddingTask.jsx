@@ -1,13 +1,13 @@
 import React from 'react';
 import '../../styles/pageOfTasks.css';
+import { Link } from 'react-router-dom';
 
-const AddingTask = ({ text, inputValue, setInputValue, handleKeyPress, createNewTask }) => {
-
+const AddingTask = ({ logOutUser, text, inputValue, setInputValue, handleKeyPress, createNewTask }) => {
   return (
     <div className='inner-wrapper'>
       <div className="inner">
         <div className="name-input">
-          <label>Task</label>
+          <label className='fs-5'>Task</label>
           <input
             className='task-name'
             type="text"
@@ -23,7 +23,10 @@ const AddingTask = ({ text, inputValue, setInputValue, handleKeyPress, createNew
           }
         </div>
       </div>
-      <button className="add-btn" onClick={createNewTask}>Add Task</button>
+      <div>
+        <button className="add-btn btn btn-outline-light" onClick={createNewTask}>Add Task</button>
+        <Link to={'/login'} className='log-out btn btn-primary' onClick={logOutUser}>Logout</Link>
+      </div>
     </div>
   )
 }
