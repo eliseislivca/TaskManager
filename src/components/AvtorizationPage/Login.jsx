@@ -7,6 +7,8 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [eye, setEye] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const { setUser, setTask } = useContext(CustomContext);
   const navigate = useNavigate();
   const url = 'http://localhost:3001';
@@ -18,17 +20,21 @@ const Login = () => {
     try {
       const response = await axios.get(`${url}/users?email=${email}`);
       if (response.data.length === 0) {
+        setEmailError('*User with this email was not found');
         console.error('User with this email was not found');
         return;
+      } else {
+        setEmailError('');
       }
       const user = response.data[0];
+      if (user.password !== password) {
+        setPasswordError('*Wrong password');
+        console.error('Wrong password');
+        return;
+      } 
       setUser(user);
       const res = await axios.get(`${url}/tasks?userId=${user.id}`);
       const task = res.data[0];
-      if (user.password !== password) {
-        console.error('Wrong password');
-        return;
-      }
       setTask(task);
       navigate('/tasks');
       localStorage.setItem('user', JSON.stringify(user));
@@ -37,13 +43,15 @@ const Login = () => {
       console.error('Login error:', error.message);
     }
   };
-
+  
   return (
     <div className="content">
       <form onSubmit={loginUser}>
         <h2 className="form-title">Login</h2>
         <input className="form-field" type="email" placeholder="Email" />
+        {emailError && <p className="email-error">{emailError}</p>}
         <input className="form-field" type={eye ? "text" : "password"} placeholder="Password" />
+        {passwordError && <p className="password-error">{passwordError}</p>}
         <div className="form-password">
           <span className="form-eye" onClick={() => setEye(prev => !prev)}>
             {
@@ -51,7 +59,7 @@ const Login = () => {
             }
           </span>
         </div>
-        <button className="form-btn" type="submit">Login</button>
+        <button className="form-btn btn btn-primary" type="submit">Login</button>
         <Link className="form-link" to='/register'>Create an account</Link>
       </form>
     </div>
