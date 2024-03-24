@@ -116,17 +116,34 @@ const PageOfTasks = () => {
     const taskIndex = state.tasks.findIndex(task => task.id === taskIdToComplete);
     if (taskIndex !== -1) {
       const completeUpdateTask = { completed: true };
-      axios.patch(`${url}/tasks/${taskIdToComplete}`, completeUpdateTask)
-        .then(() => {
-          const updatedTasks = [...state.tasks];
-          updatedTasks[taskIndex] = { ...updatedTasks[taskIndex], completed: true };
-          dispatch({ type: COMPLETE_TASK, payload: updatedTasks });
-          setTask(updatedTasks);
-          localStorage.setItem('task', JSON.stringify(updatedTasks))
-        })
-        .catch(error => {
-          console.error('Error completing task:', error);
-        });
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to mark this task as completed?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, complete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.patch(`${url}/tasks/${taskIdToComplete}`, completeUpdateTask)
+            .then(() => {
+              const updatedTasks = [...state.tasks];
+              updatedTasks[taskIndex] = { ...updatedTasks[taskIndex], completed: true };
+              dispatch({ type: COMPLETE_TASK, payload: updatedTasks });
+              setTask(updatedTasks);
+              localStorage.setItem('task', JSON.stringify(updatedTasks));
+            })
+            .catch(error => {
+              console.error('Error completing task:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while completing the task.',
+              });
+            });
+        }
+      });
     } else {
       console.error('Task not found');
     }
