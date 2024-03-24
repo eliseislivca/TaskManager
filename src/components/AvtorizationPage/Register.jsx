@@ -50,7 +50,7 @@ const Register = () => {
         password: password
       }
       axios.post(`${url}/users`, newUser)
-        .then(({ data }) => {
+        .then(() => {
           setUser(newUser);
           setTask([]);
           usenavigate('/tasks');
