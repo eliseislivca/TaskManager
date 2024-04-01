@@ -21,7 +21,6 @@ const Login = () => {
       const response = await axios.get(`${url}/users?email=${email}`);
       if (response.data.length === 0) {
         setEmailError('*User with this email was not found');
-        console.error('User with this email was not found');
         return;
       } else {
         setEmailError('');
@@ -29,7 +28,6 @@ const Login = () => {
       const user = response.data[0];
       if (user.password !== password) {
         setPasswordError('*Wrong password');
-        console.error('Wrong password');
         return;
       } 
       setUser(user);

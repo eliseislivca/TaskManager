@@ -16,6 +16,7 @@ const AddingTask = ({ logOutUser, text, inputValue, setInputValue, handleKeyPres
               setInputValue(e.target.value)
             }}
             onKeyPress={handleKeyPress}
+            placeholder='Enter the task'
           />
           {
             text && (

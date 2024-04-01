@@ -26,8 +26,15 @@ body {
   flex-direction: column;
 }
 .task-name {
-  border-radius: 10px;
+  margin: 20px 10px;
+  background-color: #000;
+  border-bottom: 2px #959595 solid;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0px;
   width: 170px;
+  color: #fff;
 }
 .input-error {
   font-size: 12px;
@@ -52,13 +59,19 @@ input {
   flex-direction: column;
 }
 .new-tasks .task-text {
-  width: 100%;
+  display: block;
   padding-left: 20px;
   color: rgb(220, 104, 76);
   font-weight: 200;
   background: transparent;
-  word-break: break-all;
+  overflow-wrap: break-word;
   margin-top: 15px;
+  width: 450px;
+}
+.task-text button {
+  text-decoration: none;
+  color: gray;
+  font-size: 20px;
 }
 .new-tasks input,
 .new-tasks input:focus-visible {
@@ -84,14 +97,17 @@ input {
   margin-right: 15px;
 }
 .completed {
-  width: 100%;
+  margin-top: 15px;
+  text-decoration: line-through;
+  color: #808080;
+  display: block;
   padding-left: 20px;
   font-weight: 200;
   background: transparent;
   word-break: break-all;
-  margin-top: 15px;
-  text-decoration: line-through;
-  color: #808080;
+  max-width: 700px;
+  overflow: 'hidden';
+  text-overflow: 'ellipsis';
 }
 .complete-hide {
   display: none;

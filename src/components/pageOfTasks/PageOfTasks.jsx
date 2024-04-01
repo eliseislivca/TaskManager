@@ -76,13 +76,26 @@ const PageOfTasks = () => {
   }, [user]);
 
   const logOutUser = () => {
-    localStorage.removeItem('user');
-    setUser({ email: '' });
-    localStorage.removeItem('task');
-    setTask({ task: '' });
-    navigate('/login');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to log out?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancel',
+      confirmButtonText: 'Yes, log out'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('user');
+        setUser({ email: '' });
+        localStorage.removeItem('task');
+        setTask({ task: '' });
+        navigate('/login');
+      }
+    });
   };
-
+  
   const url = 'http://localhost:3001';
 
   const createNewTask = () => {
@@ -96,7 +109,6 @@ const PageOfTasks = () => {
       };
       axios.post(`${url}/tasks`, newTask)
         .then(res => {
-          console.log('Task added successfully: ', res.data);
           dispatch({ type: ADD_TASK, payload: res.data });
           dispatch({ type: SET_INPUT_VALUE, payload: '' });
           dispatch({ type: SET_TEXT, payload: '' });
@@ -135,7 +147,6 @@ const PageOfTasks = () => {
               localStorage.setItem('task', JSON.stringify(updatedTasks));
             })
             .catch(error => {
-              console.error('Error completing task:', error);
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -149,6 +160,46 @@ const PageOfTasks = () => {
     }
   };
 
+  const incompleteTask = (taskIdToIncomplete) => {
+    const taskIndex = state.tasks.findIndex(task => task.id === taskIdToIncomplete);
+    if (taskIndex !== -1) {
+      const incompleteUpdateTask = { completed: false };
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to mark this task as incomplete?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, incomplete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.patch(`${url}/tasks/${taskIdToIncomplete}`, incompleteUpdateTask)
+            .then(() => {
+              const updatedTasks = state.tasks.map(task => {
+                if (task.id === taskIdToIncomplete) {
+                  return { ...task, completed: false };
+                }
+                return task;
+              });
+              dispatch({ type: SET_TASKS, payload: updatedTasks });
+              setTask(updatedTasks);
+              localStorage.setItem('task', JSON.stringify(updatedTasks));
+            })
+            .catch(error => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while marking the task as incomplete.',
+              });
+            });
+        }
+      });
+    } else {
+      console.error('Task not found');
+    }
+  };  
+  
   const updateTask = (taskIdToUpdate) => {
     if ((state.secondInputValue.trim() !== '') && (state.secondInputValue.length >= 3)) {
       const updatedTask = {
@@ -166,9 +217,31 @@ const PageOfTasks = () => {
           dispatch({ type: SET_SELECTED_TASK_INDEX, payload: -1 });
           setTask(updatedTasks);
           localStorage.setItem('task', JSON.stringify(updatedTasks));
+          Swal.fire({
+            title: "Are you sure?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, update it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+                timer: 1000
+              });
+            }
+          });
         })
         .catch(error => {
           console.error('Error updating task:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error updating task',
+            text: error.message
+          });
         });
     }
   };
@@ -217,20 +290,10 @@ const PageOfTasks = () => {
     }
   };
 
-  const deleteTaskCancel = () => {
-    dispatch({ type: SET_IS_ACTIVE, payload: false });
-
-    Swal.fire({
-      icon: 'info',
-      title: 'Cancelled',
-      text: 'Task deletion has been cancelled.',
-    });
-  };
-
   const handleKeyPress = (event) => {
     if (event.key === "Enter") createNewTask();
   }
-
+ 
   return (
     <div className="wrapper">
       <AddingTask
@@ -249,7 +312,8 @@ const PageOfTasks = () => {
         updateTask={updateTask}
         setSelectedTaskIndex={(index) => dispatch({ type: SET_SELECTED_TASK_INDEX, payload: index })}
         handleEditClick={handleEditClick}
-        deleteTask={deleteTask} />
+        deleteTask={deleteTask}
+        incompleteTask={incompleteTask} />
     </div>
   )
 }
