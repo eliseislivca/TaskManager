@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import PageOfTasks from "./Components/pageOfTasks/PageOfTasks";
-import Login from "./Components/AvtorizationPage/Login";
-import Register from "./Components/AvtorizationPage/Register";
+import PageOfTasks from "./components/pageOfTasks/PageOfTasks";
+import Login from "./components/AvtorizationPage/Login";
+import Register from "./components/AvtorizationPage/Register";
 
 function App() {
   return (<div className='App'>
