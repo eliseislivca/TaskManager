@@ -26,7 +26,7 @@ const AddingTask = ({ logOutUser, text, inputValue, setInputValue, handleKeyPres
       </div>
       <div>
         <button className="add-btn btn btn-outline-light" onClick={createNewTask}>Add Task</button>
-        <Link to={'/login'} className='log-out btn btn-primary' onClick={logOutUser}>Logout</Link>
+        <button className='log-out btn btn-primary' onClick={logOutUser}>Logout</button>
       </div>
     </div>
   )
