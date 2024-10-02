@@ -9,6 +9,13 @@ body {
   max-width: 900px;
   margin: 0 auto;
 }
+ .wrapper .display-tasks{
+  position: absolute;
+  margin-top: 350px;
+  margin-left: 320px;
+  font-size: 20px;
+  color: #00000053;
+}
 .inner-wrapper {
   display: flex;
   justify-content: space-between;
@@ -33,7 +40,7 @@ body {
   border-right: 0;
   border-left: 0;
   border-radius: 0px;
-  width: 170px;
+  width: 370px;
   color: #fff;
 }
 .input-error {
@@ -76,19 +83,21 @@ input {
 .new-tasks input,
 .new-tasks input:focus-visible {
   margin: auto 10px;
-  width: 250px;
+  width: 700px;
   height: 40px;
   color: rgb(220, 104, 76);
   font-size: 18px;
 }
+
 .wrapper-of-task {
   display: flex;
   min-height: 90px;
 }
+
 .wrapper-of-task button {
-  width: 100px;
-  margin: 0 3px;
+  margin: 0;
 }
+
 .buttons {
   width: 100%;
   display: flex;
@@ -96,7 +105,8 @@ input {
   justify-content: flex-end;
   margin-right: 15px;
 }
-.completed {
+  
+  .completed {
   margin-top: 15px;
   text-decoration: line-through;
   color: #808080;
@@ -112,6 +122,9 @@ input {
 .complete-hide {
   display: none;
 }
+.complete-show {
+  display: block;
+}
 .btn-complete {
   color: rgb(0, 170, 0);
 }
@@ -119,85 +132,9 @@ input {
   color: #fff;
   background-color: rgb(222, 65, 65);
 }
-.delete-active {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 470px;
-  height: 230px;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  margin: 0 auto;
-  background-color: #fff;
-  border-radius: 5px;
-}
-.delete-inactive {
-  display: none;
-}
-.delete-active h2 {
-  font-size: 27px;
-  font-weight: 400;
-  margin: 0;
-  padding: 40px 40px 0 40px;
-}
-.delete-active p {
-  font-size: 20px;
-  font-weight: 350;
-  margin: 0;
-  padding: 20px 40px 0;
-}
-.btn-again-delete {
-  display: flex;
-  justify-content: flex-end;
-  padding: 30px 30px 0 0;
-}
-.btn-again-delete .btn-cancel {
-  padding: 10px 15px;
-  font-size: 14px;
-  margin: 0 5px;
-  border-radius: 5px;
-  background-color: #fff;
-  color: rgb(83, 83, 83);
-  align-items: center;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(195, 195, 195);
-  align-self: flex-end;
-}
 .btn-cancel:hover {
   transition-duration: 0.2s;
   background-color: #d4d4d4;
-}
-.btn-again-delete .btn-remove {
-  padding: 10px 15px;
-  font-size: 14px;
-  margin: 0 5px;
-  border-radius: 5px;
-  color: rgb(222, 65, 65);
-  align-items: center;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(222, 65, 65);
-  background-color: #fff;
-}
-.btn-remove:hover {
-  transition-duration: 0.2s;
-  background-color: rgb(241, 72, 72);
-  color: #fff;
-}
-.operation-success {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  color: #000;
-  padding: 15px;
-  border-radius: 5px;
-  text-align: center;
-  display: block;
-  border: #000 1px solid;
 }
 .log-out {
   margin: 15px;

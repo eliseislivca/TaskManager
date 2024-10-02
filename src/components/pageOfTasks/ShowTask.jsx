@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/pageOfTasks.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPen, faCheck, faXmark, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 const ShowTask = ({ incompleteTask, tasks = [], completeTask, secondInputValue, secondSetInputValue, selectedTaskIndex, updateTask, setSelectedTaskIndex, handleEditClick, deleteTask }) => {
   const [showMore, setShowMore] = useState({});
@@ -39,21 +41,23 @@ const ShowTask = ({ incompleteTask, tasks = [], completeTask, secondInputValue, 
           )}
           <div className="buttons d-grid gap-2 d-md-flex justify-content-md-end">
             {task.completed ? (
-              <button className='complete-hide btn btn-outline-secondary me-md-1' onClick={() => incompleteTask(task.id)} type="button">Incomplete</button>
+              <button className='complete-hide btn' onClick={() => incompleteTask(task.id)} type="button"><FontAwesomeIcon icon={faXmark} size="2xl" style={{ color: "#878787", }} /></button>
             ) : (
-              <button className='btn-complete btn btn-outline-success me-md-1' onClick={() => completeTask(task.id)} type="button">Complete</button>
+              selectedTaskIndex !== task.id && (
+                <button className='btn-complete btn' onClick={() => completeTask(task.id)} type="button"><FontAwesomeIcon icon={faCheck} size="2xl" style={{ color: "#006602", }} /></button>
+              )
             )}
             {selectedTaskIndex === task.id ? (
               <>
-                <button className="btn btn-outline-success" onClick={() => updateTask(task.id)}>Update</button>
-                <button className="btn btn-outline-danger" onClick={() => setSelectedTaskIndex(-1)}>Cancel</button>
+                <button className="btn" onClick={() => updateTask(task.id)}><FontAwesomeIcon icon={faRotateRight} size="2xl" style={{color: "#0071c7",}} /></button>
+                <button className="btn" onClick={() => setSelectedTaskIndex(-1)}><FontAwesomeIcon icon={faXmark} size="2xl" style={{color: "#c20000",}}/></button>
               </>
             ) : (
-              <button className={`${task.completed ? "complete-hide" : "btn btn-outline-secondary me-md-2"}`} onClick={() => handleEditClick(task.id)}>Edit</button>
+              <button className={`${task.completed ? "btn complete-hide" : "btn complete-show"}`} onClick={() => handleEditClick(task.id)}><FontAwesomeIcon icon={faPen} size="xl" style={{color: "#949494",}} /></button>
             )}
 
-            {selectedTaskIndex === -1 && (
-              <button className='btn btn-outline-danger me-md' onClick={() => deleteTask(task.id)}>Delete</button>
+            {selectedTaskIndex !== task.id && (
+              <button className='btn' onClick={() => deleteTask(task.id)}><FontAwesomeIcon icon={faTrash} size="xl" style={{color: "#c20000",}} /></button>
             )}
           </div>
         </div>

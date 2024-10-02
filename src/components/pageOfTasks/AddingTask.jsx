@@ -1,6 +1,5 @@
 import React from 'react';
 import '../../styles/pageOfTasks.css';
-import { Link } from 'react-router-dom';
 
 const AddingTask = ({ logOutUser, text, inputValue, setInputValue, handleKeyPress, createNewTask }) => {
   return (
