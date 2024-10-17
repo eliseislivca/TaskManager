@@ -1,7 +1,7 @@
 import React, { useContext, useState, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Импорт FontAwesomeIcon
 import { faPencil, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import '../../styles/avtorization.css';
+import '../../styles/Avtorization.css';
 import axios from "axios";
 import { CustomContext } from './Context';
 import { useNavigate } from "react-router";
